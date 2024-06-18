@@ -2,6 +2,7 @@ package com.curso.spring.SpringBoot.Model;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +20,9 @@ public class Pessoa implements Serializable{
     private String nome;
 
     private String sobrenome;
+    
+    @Column(nullable = true)
+    private int idade;
 
    
    
@@ -49,6 +53,14 @@ public class Pessoa implements Serializable{
 
     public void setSobrenome(String sobrenome) {
         this.sobrenome = sobrenome;
+    }
+
+    public int getIdade() {
+        return idade;
+    }
+
+    public void setIdade(int idade) {
+        this.idade = idade;
     }
 
     
