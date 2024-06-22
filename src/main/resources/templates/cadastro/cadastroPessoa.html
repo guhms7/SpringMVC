@@ -1,40 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Materialize CSS -->
+    <link type="text/css" rel="stylesheet" href="/materialize/css/materialize.min.css" media="screen,projection"/>
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Cadastro Pessoa</title>
 </head>
 <body>
-    <form action="salvarpessoa" method="post">
-        <label for="">Nome</label>
-        <input type="text" name="nome">
-        <label for="">Sobrenome</label>
-        <input type="text" name="sobrenome">
-        <label for="">Idade</label>
-        <input type="text" name="idade">
-        <input type="submit" value="salvar">
-    </form>
+    <div class="container">
+        <div>
+            <form action="/salvarpessoa" method="post" th:object="${pessoaObj}">
+                <div class="input-field">
+                    <label for="id">ID</label>
+                    <input id="id" type="text" name="id" th:field="*{id}" disabled>
+                    <input type="hidden" name="id" th:field="*{id}">
+                </div>
+                <div class="input-field">
+                    <label for="nome">Nome</label>
+                    <input id="nome" type="text" name="nome" th:field="*{nome}">
+                </div>
+                <div class="input-field">
+                    <label for="sobrenome">Sobrenome</label>
+                    <input id="sobrenome" type="text" name="sobrenome" th:field="*{sobrenome}">
+                </div>
+                <div class="input-field">
+                    <label for="idade">Idade</label>
+                    <input id="idade" type="text" name="idade" th:field="*{idade}">
+                </div>
+                <button class="btn waves-effect waves-light #1e88e5 blue darken-1" type="submit" name="salvar">Salvar</button>
+            </form>
+        </div>
+        
+        <div class="col s12">
+            <h2>Pessoas Cadastradas</h2>
+            <form action="/buscarNomePessoa" method="post" th:action="@{/buscarNomePessoa}">
+                <div class="input-field inline">
+                    <input id="buscarNomePessoa" name="buscarNomePessoa" type="text" class="validate">
+                    <label for="buscarNomePessoa">Buscar</label>
+                </div>
+                <button style="margin: 0; padding: 0; display: inline-flex; align-items: center;" class="waves-effect waves-light btn" type="submit">
+                    <i style="margin: 0; padding: 0 10px;" class="material-icons right">search</i>
+                </button>
+            </form>
+        </div>
+        
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th scope="col">#Id</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Sobrenome</th>
+                    <th scope="col">Idade</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="pessoa : ${pessoas}">
+                    <td th:text="${pessoa.id}">ID</td>
+                    <td th:text="${pessoa.nome}">Nome</td>
+                    <td th:text="${pessoa.sobrenome}">Sobrenome</td>
+                    <td th:text="${pessoa.idade}">Idade</td>
+                    <td style="width: 220px;">
+                        <a class="waves-effect waves-light btn-small #1565c0 blue darken-3"
+                           th:href="@{/editarPessoa/{idPessoa}(idPessoa=${pessoa.id})}">Editar</a>
+                        <a style="margin: 0; padding: 0; display: inline-flex; align-items: center;" 
+                           class="waves-effect waves-light btn-small #dd2c00 deep-orange accent-4"
+                           th:href="@{/excluirPessoa/{idPessoa}(idPessoa=${pessoa.id})}">
+                           <i style="margin: 0; padding: 0 10px;" class="material-icons right">delete</i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-
-    <h2>Pessoas Cadastradas</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Sobrenome</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="pessoa : ${pessoas}">
-                <td th:text="${pessoa.id}">ID</td>
-                <td th:text="${pessoa.nome}">Nome</td>
-                <td th:text="${pessoa.sobrenome}">Sobrenome</td>
-            </tr>
-        </tbody>
-    </table>
-
-
+    <!-- Materialize JavaScript -->
+    <script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
 </body>
 </html>

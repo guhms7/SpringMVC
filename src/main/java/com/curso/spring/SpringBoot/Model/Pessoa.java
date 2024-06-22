@@ -11,7 +11,7 @@ import jakarta.persistence.Id;
 @Entity
 public class Pessoa implements Serializable{
 
-    private final static long serialVersionUID =1L;
+    private final static long serialVersionUID =1l;
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
