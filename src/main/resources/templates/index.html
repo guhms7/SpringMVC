@@ -3,12 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Materialize -->
+    <link type="text/css" rel="stylesheet" href="/materialize/css/materialize.min.css"  media="screen,projection"/>
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <title>Index</title>
 </head>
 <body>
     <h1>
         Olá Spring Boot!
     </h1>
-    <a th:href="@{/cadastroPessoa}">Cadastro Pessoa</a>
+    
+    
+      <a th:href="@{/cadastroPessoa}">
+        <button class="btn waves-effect waves-light" >
+            Cadastro Pessoa
+            <i class="material-icons right">send</i>
+          </button>
+      </a>
+    
+
+
+    <!-- Materialize -->
+    <script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
 </body>
 </html>
