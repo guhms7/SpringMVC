@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Materialize CSS -->
+    <link type="text/css" rel="stylesheet" href="/materialize/css/materialize.min.css" media="screen,projection"/>
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Cadastro Telefones</title>
+</head>
+<body>
+    <div class="container">
+
+        <h3>Spring+Thymeleaf+Postgres</h3>
+        <h5>Tela de cadastro de telefones</h5>
+
+        <div th:each="p : ${pessoaObj}">
+            <a th:href="@{/cadastroPessoa}">
+                <button class="btn waves-effect waves-light">
+                    Voltar
+                    <i class="material-icons left">send</i>
+                </button>
+            </a>
+
+            <div class="row">
+                <p>ID: <span th:text="${p.id}"></span></p>
+                <p>Nome: <span th:text="${p.nome}"></span></p>
+                <p>Sobrenome: <span th:text="${p.sobrenome}"></span></p>
+                <p>Idade: <span th:text="${p.idade}"></span></p>
+            </div>
+
+            <h5>Telefones</h5>
+            <div class="row">
+                <form th:action="@{/adicionarNumero/{idPessoa}(idPessoa=${p.id})}" method="post" class="col s12">
+                    <div class="row valign-wrapper">
+                        <div class="input-field col s5">
+                            <label for="numero" class="active">Numero:</label>
+                            <input type="number" class="validate" id="numero" name="numero">
+                        </div>
+
+                        <div class="input-field col s4">
+                            <select class="browser-default" name="tipo">
+                                <option value="" disabled selected>Escolha o tipo do número</option>
+                                <option value="Fixo">Fixo</option>
+                                <option value="Celular">Celular</option>
+                            </select>
+                        </div>
+
+                        <div class="col s3" style="margin: auto;">
+                            <button class="btn waves-effect waves-light" type="submit" name="action">Adicionar
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <table class="striped">
+                <tr th:each="fone : ${telefones}">
+                    <td th:text="${fone.numero}"></td>
+                    <td th:text="${fone.tipo}"></td>
+                    <td> 
+                        <a class="waves-effect waves-light btn-small #1565c0 blue darken-3"
+                           th:href="@{/editarTelefone/{idTelefone}(idTelefone=${fone.id})}">Editar</a>
+                        <a style="margin: 0; padding: 0; display: inline-flex; align-items: center;" 
+                           class="waves-effect waves-light btn-small #dd2c00 deep-orange accent-4"
+                           th:href="@{/excluirTelefone/{idTelefone}(idTelefone=${fone.id})}">
+                           <i style="margin: 0; padding: 0 10px;" class="material-icons right">delete</i>
+                        </a>
+                    </td>
+
+                </tr>
+            </table>
+        </div>
+
+    </div>
+    <!-- Materialize JavaScript -->
+    <script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
+</body>
+</html>

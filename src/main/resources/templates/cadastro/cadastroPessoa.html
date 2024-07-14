@@ -8,36 +8,84 @@
     <!-- Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Cadastro Pessoa</title>
+
+    <style>
+        table>tbody>tr:nth-child(odd){
+            background: rgb(207, 207, 207);
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+            font-weight: normal;
+            color: rgba(0,0,0,0.87);
+            font-size: 15px;
+            border-collapse: collapse;
+            border-spacing: 0;
+            box-sizing: inherit;
+        }
+
+        table>tbody>tr:hover{
+            background: rgb(188, 239, 248);
+
+        }
+        table>tbody>tr>td{
+            border-radius: 0px;
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+            font-weight: normal;
+            color: rgba(0,0,0,0.87);
+            font-size: 15px;
+            border-collapse: collapse;
+            border-spacing: 0;
+            box-sizing: inherit;
+            border: none;
+            padding: 15px 5px;
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+    </style>
+
 </head>
 <body>
     <div class="container">
+
+        <h3>Spring+Thymeleaf+Postgres</h3>
+        <h5>Aplicação simples para cadastro de pessoas</h5>
+
         <div>
-            <form action="/salvarpessoa" method="post" th:object="${pessoaObj}">
-                <div class="input-field">
-                    <label for="id">ID</label>
-                    <input id="id" type="text" name="id" th:field="*{id}" disabled>
-                    <input type="hidden" name="id" th:field="*{id}">
+            <form action="/salvarpessoa" method="post" th:object="${pessoaObj}" class="col s12" id="formPessoa">
+                <h3>Cadastro de Pessoas</h3>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <label for="id" class="active">ID</label>
+                        <input id="id" type="text" name="id" th:field="*{id}" disabled>
+                        <input type="hidden" name="id" th:field="*{id}">
+                    </div>
+                
+                    <div class="input-field col s6">
+                        <label for="nome" class="active">Nome</label>
+                        <input id="nome" type="text" name="nome" th:field="*{nome}" class="validate" required="required">
+                    </div>
                 </div>
-                <div class="input-field">
-                    <label for="nome">Nome</label>
-                    <input id="nome" type="text" name="nome" th:field="*{nome}">
+
+                <div class="row">
+                    <div class="input-field col s6">
+                        <label for="sobrenome" class="active">Sobrenome</label>
+                        <input id="sobrenome" type="text" name="sobrenome" th:field="*{sobrenome}" class="validate" required="required">
+                    </div>
+                    <div class="input-field col s6">
+                        <label for="idade" class="active">Idade</label>
+                        <input id="idade" type="text" name="idade" th:field="*{idade}" class="validate" required="required">
+                    </div>
                 </div>
-                <div class="input-field">
-                    <label for="sobrenome">Sobrenome</label>
-                    <input id="sobrenome" type="text" name="sobrenome" th:field="*{sobrenome}">
-                </div>
-                <div class="input-field">
-                    <label for="idade">Idade</label>
-                    <input id="idade" type="text" name="idade" th:field="*{idade}">
-                </div>
-                <button class="btn waves-effect waves-light #1e88e5 blue darken-1" type="submit" name="salvar">Salvar</button>
+                <button class="btn waves-effect waves-light #1e88e5 blue darken-1" type="submit" name="salvar">Salvar <i class="material-icons right">save</i></button>
+                <button class="btn waves-effect" onclick="document.getElementById('formPessoa').reset();"><i class="material-icons right">add</i>Novo</button>
             </form>
         </div>
         
         <div class="col s12">
             <h2>Pessoas Cadastradas</h2>
             <form action="/buscarNomePessoa" method="post" th:action="@{/buscarNomePessoa}">
-                <div class="input-field inline">
+                <div class="input-field inline" style="margin-left: 650px;">
                     <input id="buscarNomePessoa" name="buscarNomePessoa" type="text" class="validate">
                     <label for="buscarNomePessoa">Buscar</label>
                 </div>
@@ -47,7 +95,7 @@
             </form>
         </div>
         
-        <table class="striped">
+        <table class="highlight centered">
             <thead>
                 <tr>
                     <th scope="col">#Id</th>
@@ -59,10 +107,10 @@
             </thead>
             <tbody>
                 <tr th:each="pessoa : ${pessoas}">
-                    <td th:text="${pessoa.id}">ID</td>
-                    <td th:text="${pessoa.nome}">Nome</td>
-                    <td th:text="${pessoa.sobrenome}">Sobrenome</td>
-                    <td th:text="${pessoa.idade}">Idade</td>
+                    <td><strong><span th:text="${pessoa.id}"></span></strong></td>
+                    <td><a th:href="@{/telefones/{idPessoa}(idPessoa=${pessoa.id})}"><span th:text="${pessoa.nome}"></span></a></td>
+                    <td th:text="${pessoa.sobrenome}"></td>
+                    <td th:text="${pessoa.idade}"></td>
                     <td style="width: 220px;">
                         <a class="waves-effect waves-light btn-small #1565c0 blue darken-3"
                            th:href="@{/editarPessoa/{idPessoa}(idPessoa=${pessoa.id})}">Editar</a>
