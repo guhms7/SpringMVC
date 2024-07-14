@@ -1,35 +1,29 @@
 package com.curso.spring.SpringBoot.Model;
 
 import java.io.Serializable;
-
-import jakarta.persistence.Column;
+import java.util.List;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Pessoa implements Serializable{
 
-    private final static long serialVersionUID =1l;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String nome;
-
     private String sobrenome;
-    
-    @Column(nullable = true)
     private int idade;
 
-   
-   
-   
-    public static long getSerialversionuid() {
-        return serialVersionUID;
-    }
+    @OneToMany(mappedBy = "pessoa")
+    private List<Telefone> telefones;
+
+    // Getters e Setters
 
     public Long getId() {
         return id;
@@ -63,5 +57,11 @@ public class Pessoa implements Serializable{
         this.idade = idade;
     }
 
-    
+    public List<Telefone> getTelefones() {
+        return telefones;
+    }
+
+    public void setTelefones(List<Telefone> telefones) {
+        this.telefones = telefones;
+    }
 }
