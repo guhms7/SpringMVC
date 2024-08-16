@@ -83,18 +83,24 @@ public class PessoaController {
         return modelAndView;
     }
 
-    @PostMapping("/editarTelefone/{idTelefone}")
+    @GetMapping("/editarTelefone/{idTelefone}")
     public ModelAndView editarTelefone(@PathVariable("idTelefone") Long idtelefone){
         ModelAndView telefoneAndView = new ModelAndView("cadastro/telefones");
-        Optional<Telefone> telefone = telefoneRepository.findById(idtelefone);
-        telefoneAndView.addObject("telefone", telefone.orElse(new Telefone()));
+        Telefone telefone = telefoneRepository.findById(idtelefone).orElseThrow(() -> new RuntimeException("Telefone não encontrado"));
+        Pessoa pessoa = telefone.getPessoa();
+        telefoneAndView.addObject("pessoaObj", pessoa);
+        telefoneAndView.addObject("telefone", telefone);
+        telefoneAndView.addObject("telefones", pessoa.getTelefones());
+        
         return telefoneAndView ;
     }
 
     @GetMapping("/excluirTelefone/{idTelefone}")
     public String excluirTelefone(@PathVariable("idTelefone") Long idTelefone) {
+        Telefone telefone = telefoneRepository.findById(idTelefone).orElseThrow(() -> new RuntimeException("Telefone nao encontrado"));
+        Long id= telefone.getPessoa().getId();
         telefoneRepository.deleteById(idTelefone);
-        return "redirect:/telefones";
+        return "redirect:/telefones/"+id;
     }
 }
 
