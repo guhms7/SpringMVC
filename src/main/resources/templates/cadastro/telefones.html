@@ -32,7 +32,7 @@
 
             <h5>Telefones</h5>
             <div class="row">
-                <form th:action="@{/adicionarNumero/{idPessoa}(idPessoa=${p.id})}" method="post" class="col s12">
+                <form th:action="@{/adicionarNumero/{idPessoa}(idPessoa=${p.id})}" th:object="${telefone}" id="formTelefone" method="post" class="col s12">
                     <div class="row valign-wrapper">
                         <div class="input-field col s5">
                             <label for="numero" class="active">Numero:</label>
@@ -69,7 +69,9 @@
                     <td th:text="${fone.tipo}"></td>
                     <td> 
                         <a class="waves-effect waves-light btn-small #1565c0 blue darken-3"
-                           th:href="@{/editarTelefone/{idTelefone}(idTelefone=${fone.id})}">Editar</a>
+                           th:href="@{/editarTelefone/{idTelefone}(idTelefone=${fone.id})}" >Editar
+                        </a>
+                       
                         <a style="margin: 0; padding: 0; display: inline-flex; align-items: center;" 
                            class="waves-effect waves-light btn-small #dd2c00 deep-orange accent-4"
                            th:href="@{/excluirTelefone/{idTelefone}(idTelefone=${fone.id})}">

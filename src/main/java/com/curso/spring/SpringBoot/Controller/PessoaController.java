@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,11 +48,24 @@ public class PessoaController {
         return "redirect:/cadastroPessoa";
     }
 
-    @PostMapping("/salvarpessoa")
+    // @PostMapping("/salvarpessoa")
+    // public String salvar(Pessoa pessoa){
+    //     pessoaRepository.saveAndFlush(pessoa);
+    //     return "redirect:/cadastroPessoa";
+    // }
+
+    @PostMapping("/salvarPessoa")
     public String salvar(Pessoa pessoa){
-        pessoaRepository.saveAndFlush(pessoa);
+        if (pessoa.getId() != null) {
+            Pessoa pessoaExistente = pessoaRepository.findById(pessoa.getId()).orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+            pessoa.setTelefones(pessoaExistente.getTelefones()); // Mantém a lista de telefones existente
+        }
+        pessoaRepository.save(pessoa);
+        
         return "redirect:/cadastroPessoa";
     }
+    
+
     
     @PostMapping("/buscarNomePessoa")
     public ModelAndView buscarNome(@RequestParam("buscarNomePessoa") String buscarNomePessoa){
@@ -73,13 +87,11 @@ public class PessoaController {
     @PostMapping("/adicionarNumero/{idPessoa}")
     public ModelAndView adicionarNumero(Telefone telefone, @PathVariable("idPessoa") Long idPessoa) {
         ModelAndView modelAndView = new ModelAndView("cadastro/telefones");
-
         Pessoa pessoa = pessoaRepository.findById(idPessoa).orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
-        telefone.setPessoa(pessoa);
-        telefoneRepository.save(telefone);
+        pessoa.addTelefone(telefone); // Usa o método auxiliar para adicionar o telefone
+        pessoaRepository.save(pessoa);
         modelAndView.addObject("pessoaObj", pessoa);
         modelAndView.addObject("telefones", pessoa.getTelefones());
-        
         return modelAndView;
     }
 
@@ -91,8 +103,15 @@ public class PessoaController {
         telefoneAndView.addObject("pessoaObj", pessoa);
         telefoneAndView.addObject("telefone", telefone);
         telefoneAndView.addObject("telefones", pessoa.getTelefones());
-        
         return telefoneAndView ;
+    }
+
+    @PostMapping("/editarTelefone/{idTelefone}")
+    public String salvarTelefone(@PathVariable("idTelefone") Long idTelefone, @ModelAttribute Telefone telefoneAtualizado){
+        Telefone telefoneExistente = telefoneRepository.findById(idTelefone).orElseThrow(() -> new RuntimeException("Telefone não encontrado"));
+        telefoneExistente.setNumero(telefoneAtualizado.getNumero());
+        telefoneRepository.save(telefoneExistente);
+        return "redirect:/telefones/" + telefoneExistente.getPessoa().getId();
     }
 
     @GetMapping("/excluirTelefone/{idTelefone}")
@@ -103,5 +122,3 @@ public class PessoaController {
         return "redirect:/telefones/"+id;
     }
 }
-
-

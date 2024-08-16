@@ -8,7 +8,7 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Telefone {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -20,7 +20,6 @@ public class Telefone {
     private Pessoa pessoa;
 
     // Getters e Setters
-
     public Long getId() {
         return id;
     }
