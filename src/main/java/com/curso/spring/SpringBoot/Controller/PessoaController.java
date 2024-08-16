@@ -98,10 +98,11 @@ public class PessoaController {
     @GetMapping("/editarTelefone/{idTelefone}")
     public ModelAndView editarTelefone(@PathVariable("idTelefone") Long idtelefone){
         ModelAndView telefoneAndView = new ModelAndView("cadastro/telefones");
-        Optional<Telefone> telefone = telefoneRepository.findById(idtelefone);
-        Pessoa pessoa = telefone.get().getPessoa();
+        Telefone telefone = telefoneRepository.findById(idtelefone).orElseThrow(() -> new RuntimeException("Telefone não encontrado"));
+        Pessoa pessoa = telefone.getPessoa();
         telefoneAndView.addObject("pessoaObj", pessoa);
         telefoneAndView.addObject("telefone", telefone);
+        telefoneAndView.addObject("telefones", pessoa.getTelefones());
         return telefoneAndView ;
     }
 
@@ -113,16 +114,11 @@ public class PessoaController {
         return "redirect:/telefones/" + telefoneExistente.getPessoa().getId();
     }
 
-
     @GetMapping("/excluirTelefone/{idTelefone}")
-    public ModelAndView excluirTelefone(@PathVariable("idTelefone") Long idTelefone) {
-        ModelAndView telefoneAndView = new ModelAndView("cadastro/telefones");
-        Pessoa pessoa = telefoneRepository.findById(idTelefone).get().getPessoa();
+    public String excluirTelefone(@PathVariable("idTelefone") Long idTelefone) {
+        Telefone telefone = telefoneRepository.findById(idTelefone).orElseThrow(() -> new RuntimeException("Telefone nao encontrado"));
+        Long id= telefone.getPessoa().getId();
         telefoneRepository.deleteById(idTelefone);
-        telefoneAndView.addObject("pessoaObj", pessoa);
-        telefoneAndView.addObject("telefones", pessoa.getTelefones());
-        return telefoneAndView;
+        return "redirect:/telefones/"+id;
     }
 }
-
-
